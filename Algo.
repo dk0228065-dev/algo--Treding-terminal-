@@ -1,0 +1,82 @@
+import streamlit as st
+import pandas as pd
+
+st.set_page_config(
+    page_title="AI Quant Trading Terminal",
+    page_icon="⚡",
+    layout="wide"
+)
+
+# साइडबार: कंट्रोल्स
+st.sidebar.title("🛡️ कंट्रोल सेंटर")
+client_id = st.sidebar.text_input("Dhan Client ID", type="password")
+access_token = st.sidebar.text_input("Dhan Access Token", type="password")
+
+st.sidebar.markdown("---")
+st.sidebar.subheader("🤖 AI ऑटोमेशन कंट्रोल")
+auto_trade_toggle = st.sidebar.toggle("फुल AI ऑटो-ट्रेडिंग चालू करें", value=False)
+
+if auto_trade_toggle:
+    st.sidebar.success("● AI इंजन: सक्रिय (Monitoring Live Ticks)")
+else:
+    st.sidebar.warning("○ AI इंजन: बंद (सिर्फ वॉच मोड)")
+
+st.sidebar.markdown("---")
+st.sidebar.subheader("⚠️ कैपिटल प्रोटेक्शन")
+max_daily_loss = st.sidebar.number_input("अधिकतम दैनिक नुकसान (₹)", value=2000, step=500)
+risk_per_trade = st.sidebar.slider("प्रति ट्रेड रिस्क (%)", 0.5, 3.0, 1.0)
+
+# मुख्य डैशबोर्ड
+st.title("⚡ AI ऑटोनॉमस क्वांट ट्रेडिंग प्लेटफॉर्म")
+st.caption("मल्टी-टाइमफ्रेम एनालिसिस • ग्लोबल न्यूज सेंटिमेंट • लाइव Dhan एग्जीक्यूशन")
+
+col1, col2, col3, col4 = st.columns(4)
+col1.metric("उपलब्ध कैपिटल", "₹ 1,00,000", "सुरक्षित")
+col2.metric("आज का P&L", "+₹ 1,850", "+1.85%")
+col3.metric("AI कॉन्फिडेंस स्कोर", "82%", "Bullish")
+col4.metric("सक्रिय ट्रेड्स", "1 ओपन", "निफ्टी 15-Min")
+
+st.markdown("---")
+
+left_col, right_col = st.columns([2, 1])
+
+with left_col:
+    st.subheader("📊 मल्टी-टाइमफ्रेम प्रोजेक्शन व सिग्नल्स")
+    tab1, tab2, tab3 = st.tabs(["1-मिनट (स्कैल्पिंग)", "5-मिनट (मोमेंटम)", "15-मिनट (ट्रेंड)"])
+    
+    with tab1:
+        st.write("**1-Min स्टेटस:** RSI: 58 | वॉल्यूम: हाई")
+        data_1m = pd.DataFrame({"NIFTY": [24500, 24510, 24505, 24520, 24535, 24530, 24545, 24560]})
+        st.line_chart(data_1m)
+
+    with tab2:
+        st.write("**5-Min प्रोजेक्शन:** ब्रेकआउट लेवल 24,580 के करीब")
+        data_5m = pd.DataFrame({"NIFTY": [24450, 24470, 24490, 24510, 24500, 24530, 24550, 24570]})
+        st.line_chart(data_5m)
+
+    with tab3:
+        st.write("**15-Min मास्टर ट्रेंड:** स्ट्रॉन्ग अपट्रेंड")
+        data_15m = pd.DataFrame({"NIFTY": [24400, 24440, 24480, 24520, 24550, 24570]})
+        st.line_chart(data_15m)
+
+with right_col:
+    st.subheader("🌍 AI ग्लोबल न्यूज सेंटिमेंट")
+    st.info("🟢 US Fed अपडेट: ब्याज दरों में स्थिरता (Bullish)")
+    st.info("🟢 कच्चा तेल (Crude Oil): 1.2% की गिरावट")
+    st.warning("🟡 ग्लोबल मार्केट्स: न्यूट्रल")
+    st.success("निष्कर्ष: **BUY ON DIPS**")
+
+st.markdown("---")
+st.subheader("📋 सक्रिय पोजीशन्स")
+positions = pd.DataFrame([
+    {
+        "सिंबल": "NIFTY 24550 CE",
+        "मात्रा": 50,
+        "खरीद भाव": 112.50,
+        "मौजूदा भाव": 134.00,
+        "SL": 98.00,
+        "टारगेट": 150.00,
+        "P&L (₹)": "+1,075.00"
+    }
+])
+st.dataframe(positions, use_container_width=True)
